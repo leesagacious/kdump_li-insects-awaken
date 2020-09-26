@@ -5,15 +5,28 @@
 */
 unsigned long long elfhead_address = NOT_KDUMP_SETUP;
 
+static ssize_t type_show(struct kobject *kobj,
+                         struct kobj_attribute *attr, char *buf)
+{
+        return 0;
+}
+
+static struct kobj_attribute type_attr = __ATTR_RO(type);
+
 static int __init capturekernel_startpoint(void)
 {
-	int err_val = 0;
+	int ret = 0;
 
 	if (elfhead_address != NOT_KDUMP_SETUP) {
 		pr_err("the 2 kernel is booting after not panic\n");
 		pr_err("Bye, haha!!\n");
 		BUG();
 	}
+
+	ret = sysfs_create_file(NULL, &type_attr);
+	WARN_ON(ret);
+
+	return ret;
 }
 
 core_initcall(capturekernel_startpoint); 
