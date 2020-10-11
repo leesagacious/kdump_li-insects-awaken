@@ -23,6 +23,11 @@ static ssize_t type_show(struct kobject *kobj,
 
 static struct kobj_attribute type_attr = __ATTR_RO(type);
 
+static int __init build_crash_kernel_memory_list(void)
+{
+	return 0;
+}
+
 static int __init capturekernel_startpoint(void)
 {
 	int ret;
@@ -33,10 +38,15 @@ static int __init capturekernel_startpoint(void)
 		BUG();
 	}
 
+	ret = build_crash_kernel_memory_list(void);
+	if (ret) {
+		pr_err("Can't attach the crashed memory to the linked list");
+		return ret;
+	}
 	ret = sysfs_create_file(NULL, &type_attr);
 	WARN_ON(ret);
 
-	return ret;
+	return 0;
 }
 
 core_initcall(capturekernel_startpoint);
