@@ -1,3 +1,4 @@
+#include <linux/errno.h>
 
 /*
 	The default value is -1, otherwise, 
@@ -15,11 +16,11 @@ static struct kobj_attribute type_attr = __ATTR_RO(type);
 
 static int __init capturekernel_startpoint(void)
 {
-	int ret = 0;
+	int ret;
 
 	if (elfhead_address != NOT_KDUMP_SETUP) {
-		pr_err("the 2 kernel is booting after not panic\n");
-		pr_err("Bye, haha!!\n");
+		pr_err("the 2 kernel is booting after not panic ! Bye Bye haha. \n");
+		return -EINVAL;
 		BUG();
 	}
 
