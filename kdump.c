@@ -1,6 +1,11 @@
 #include <linux/errno.h>
 
 /*
+	Each item on the linked list is a memory range that crashes the kernel memory
+*/
+static struct list_head targets = LIST_HEAD_INIT(crash_memory_range);
+
+/*
 	The default value is -1, otherwise, 
 	it means that the second capture kernel was started because kdump occurred.
 */
